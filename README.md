@@ -5,7 +5,7 @@ Complete Automated Character Lockdown System for AI-Powered Video Generation
 
 ## 🚀 Live Demo
 
-Visit the live application: [ACLS Video Generator](https://yourusername.github.io/your-repository-name)
+Visit the live application: [ACLS Video Generator](https://Cavemanjames.github.io/ACLS-AI-Video-Generator)
 
 ## 📖 Overview
 
