@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ACLS AI Video Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'spin': 'spin 1s linear infinite',
+                        'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body class="bg-black">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        window.onload = function () {
+            const { useState, useEffect } = React;
+            const { 
+                Play, Upload, Mic, Eye, Settings, Zap, Monitor, Users, Download, 
+                ChevronRight, Check, AlertCircle 
+            } = lucide;
+
+            const ACLSVideoGenerator = () => {
+                const [systemStatus, setSystemStatus] = useState('INITIALIZING');
+                const [characters, setCharacters] = useState([]);
+                const [currentProject, setCurrentProject] = useState(null);
+                const [inputText, setInputText] = useState('');
+                const [generationProgress, setGenerationProgress] = useState(0);
+                const [isGenerating, setIsGenerating] = useState(false);
+                const [activeTab, setActiveTab] = useState('create');
+                const [logs, setLogs] = useState([]);
+
+                useEffect(() => {
+                    const initSequence = [
+                        'INITIALIZE: Character_Directory_Core',
+                        'ACTIVATE: Auto_Profile_Generator',
+                        'ENABLE: Real_Time_Consistency_Monitor',
+                        'START: Intelligent_Character_Manager',
+                        'LAUNCH: Universal_Video_Integration',
+                        'DEPLOY: Self_Learning_Algorithm',
+                        'STATUS: FULLY_OPERATIONAL'
+                    ];
+
+                    let index = 0;
+                    const interval = setInterval(() => {
+                        if (index < initSequence.length) {
+                            setLogs(prev => [...prev, { type: 'system', message: initSequence[index], timestamp: Date.now() }]);
+                            index++;
+                        } else {
+                            setSystemStatus('OPERATIONAL');
+                            clearInterval(interval);
+                        }
+                    }, 500);
+
+                    return () => clearInterval(interval);
+                }, []);
+
+                const addLog = (type, message) => {
+                    setLogs(prev => [...prev, { type, message, timestamp: Date.now() }]);
+                };
+
+                const createCharacter = async (input, type = 'text') => {
+                    const characterId = `CHAR_${Date.now()}`;
+                    addLog('processing', `AUTO_PROCESS: Analyzing ${type} input...`);
+
+                    const steps = [
+                        'Analyze personality keywords',
+                        'Generate visual profile',
+                        'Create voice profile',
+                        'Develop behavioral patterns',
+                        'Assign unique ID',
+                        'LOCK_CHARACTER → Ready for video generation'
+                    ];
+
+                    for (let i = 0; i < steps.length; i++) {
+                        await new Promise(resolve => setTimeout(resolve, 300));
+                        addLog('processing', `├── ${steps[i]}`);
+                    }
+
+                    const newCharacter = {
+                        id: characterId,
+                        name: input.split(' ').slice(-2).join(' ') || 'Generated Character',
+                        input: input,
+                        type: type,
+                        visual: {
+                            appearance: type === 'text' ? 'Sharp features, keen eyes, tailored coat' : 'Auto-generated from image',
+                            style: 'Photorealistic',
+                            consistency: '99.9%'
+                        },
+                        voice: {
+                            tone: 'Deep, measured tone with slight rasp',
+                            emotional_range: 'Full spectrum mapped',
+                            consistency: '100%'
+                        },
+                        behavior: {
+                            personality: 'Methodical, intuitive, reserved',
+                            adaptability: 'High',
+                            intelligence: 'Advanced reasoning'
+                        },
+                        created: new Date().toLocaleString(),
+                        status: 'LOCKED'
+                    };
+
+                    setCharacters(prev => [...prev, newCharacter]);
+                    addLog('success', `Character ${characterId} successfully created and locked!`);
+                    return newCharacter;
+                };
+
+                return React.createElement('div', {
+                    className: "min-h-screen text-white p-6"
+                }, [
+                    React.createElement('h1', { className: "text-3xl font-bold mb-6" }, "ACLS AI Video Generator"),
+                    React.createElement('textarea', {
+                        value: inputText,
+                        onChange: (e) => setInputText(e.target.value),
+                        placeholder: "Describe your character...",
+                        className: "w-full p-3 rounded bg-gray-800 text-white"
+                    }),
+                    React.createElement('button', {
+                        onClick: () => createCharacter(inputText),
+                        disabled: !inputText.trim() || systemStatus !== 'OPERATIONAL',
+                        className: "mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded"
+                    }, "Create Character"),
+                    React.createElement('div', { className: "mt-6" },
+                        logs.slice(-10).map((log, i) =>
+                            React.createElement('div', {
+                                key: i,
+                                className: "text-sm text-gray-300"
+                            }, `${log.message}`)
+                        )
+                    )
+                ]);
+            };
+
+            ReactDOM.render(React.createElement(ACLSVideoGenerator), document.getElementById('root'));
+        };
+    </script>
+</body>
+</html>
