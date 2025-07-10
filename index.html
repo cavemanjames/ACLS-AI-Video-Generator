@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>ACLS AI Video Generator</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" defer></script>
@@ -22,25 +22,26 @@
         };
     </script>
 </head>
-<body class="bg-black">
-    <div id="root"></div>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">
+    <div id="root" class="w-full max-w-3xl p-6">
+        <noscript class="text-center text-red-500 mb-4">
+            Please enable JavaScript to use the ACLS AI Video Generator.
+        </noscript>
+        <p class="text-center text-gray-400">Loading application...</p>
+    </div>
 
     <script type="text/babel">
         window.onload = function () {
             const { useState, useEffect } = React;
-            const { 
-                Play, Upload, Mic, Eye, Settings, Zap, Monitor, Users, Download, 
-                ChevronRight, Check, AlertCircle 
+            const {
+                Play, Upload, Mic, Eye, Settings, Zap, Monitor, Users, Download,
+                ChevronRight, Check, AlertCircle
             } = lucide;
 
             const ACLSVideoGenerator = () => {
                 const [systemStatus, setSystemStatus] = useState('INITIALIZING');
                 const [characters, setCharacters] = useState([]);
-                const [currentProject, setCurrentProject] = useState(null);
                 const [inputText, setInputText] = useState('');
-                const [generationProgress, setGenerationProgress] = useState(0);
-                const [isGenerating, setIsGenerating] = useState(false);
-                const [activeTab, setActiveTab] = useState('create');
                 const [logs, setLogs] = useState([]);
 
                 useEffect(() => {
@@ -120,25 +121,25 @@
                 };
 
                 return React.createElement('div', {
-                    className: "min-h-screen text-white p-6"
+                    className: "min-h-screen p-6"
                 }, [
-                    React.createElement('h1', { className: "text-3xl font-bold mb-6" }, "ACLS AI Video Generator"),
+                    React.createElement('h1', { className: "text-3xl font-bold mb-6 text-center" }, "ACLS AI Video Generator"),
                     React.createElement('textarea', {
                         value: inputText,
                         onChange: (e) => setInputText(e.target.value),
                         placeholder: "Describe your character...",
-                        className: "w-full p-3 rounded bg-gray-800 text-white"
+                        className: "w-full p-3 rounded bg-gray-800 text-white resize-none h-24"
                     }),
                     React.createElement('button', {
                         onClick: () => createCharacter(inputText),
                         disabled: !inputText.trim() || systemStatus !== 'OPERATIONAL',
-                        className: "mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded"
+                        className: "mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded block mx-auto disabled:opacity-50"
                     }, "Create Character"),
-                    React.createElement('div', { className: "mt-6" },
+                    React.createElement('div', { className: "mt-6 max-h-40 overflow-y-auto bg-gray-800 p-4 rounded" },
                         logs.slice(-10).map((log, i) =>
                             React.createElement('div', {
                                 key: i,
-                                className: "text-sm text-gray-300"
+                                className: `text-sm ${log.type === 'success' ? 'text-green-400' : (log.type === 'processing' ? 'text-yellow-300' : 'text-gray-300')}`
                             }, `${log.message}`)
                         )
                     )
